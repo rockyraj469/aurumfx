@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Activity, Shield, Globe } from "lucide-react";
+import { ArrowRight, Activity, Shield, Globe, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
@@ -45,8 +45,8 @@ export default function Landing() {
           <span className="font-display text-xl font-bold tracking-wider text-glow">AURUM<span className="text-primary">FX</span></span>
         </div>
         <div className="flex items-center gap-4">
-          <a href="/api/login">
-            <Button variant="glass" className="hidden sm:flex">Client Portal</Button>
+          <a href="/signup">
+            <Button variant="glass" className="hidden sm:flex">Create Account</Button>
           </a>
           <a href="/api/login">
             <Button>
@@ -82,14 +82,16 @@ export default function Landing() {
           </motion.p>
           
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <a href="/api/login" className="w-full sm:w-auto">
+            <a href="/explore" className="w-full sm:w-auto">
               <Button size="lg" className="w-full text-lg box-glow">
-                Open Prime Account
+                Explore Markets <TrendingUp className="ml-2 w-4 h-4" />
               </Button>
             </a>
-            <Button size="lg" variant="glass" className="w-full sm:w-auto text-lg">
-              Explore Markets
-            </Button>
+            <a href="/signup" className="w-full sm:w-auto">
+              <Button size="lg" variant="glass" className="w-full sm:w-auto text-lg">
+                Create Account
+              </Button>
+            </a>
           </motion.div>
         </motion.div>
       </main>

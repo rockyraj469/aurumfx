@@ -32,6 +32,7 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    host: true,          // ← Add this line to allow external access
     fs: {
       strict: true,
       deny: ["**/.*"],

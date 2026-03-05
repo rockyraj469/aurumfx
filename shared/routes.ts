@@ -1,55 +1,24 @@
-import { z } from 'zod';
-import { insertTradeSchema, trades, portfolios } from './schema';
-
-export const errorSchemas = {
-  validation: z.object({ message: z.string(), field: z.string().optional() }),
-  notFound: z.object({ message: z.string() }),
-  internal: z.object({ message: z.string() }),
-  unauthorized: z.object({ message: z.string() }),
-};
+import { z } from "zod";
+import { trades, portfolios } from './schema';
 
 export const api = {
   portfolio: {
     get: {
-      method: 'GET' as const,
-      path: '/api/portfolio' as const,
-      responses: {
-        200: z.custom<typeof portfolios.$inferSelect>(),
-        401: errorSchemas.unauthorized,
-        404: errorSchemas.notFound,
-      },
+      path: '/api/portfolio',
     },
   },
   trades: {
     list: {
-      method: 'GET' as const,
-      path: '/api/trades' as const,
-      responses: {
-        200: z.array(z.custom<typeof trades.$inferSelect>()),
-        401: errorSchemas.unauthorized,
-      },
+      path: '/api/trades',
     },
     create: {
-      method: 'POST' as const,
-      path: '/api/trades' as const,
-      input: insertTradeSchema,
-      responses: {
-        201: z.custom<typeof trades.$inferSelect>(),
-        400: errorSchemas.validation,
-        401: errorSchemas.unauthorized,
-      },
-    }
-  }
+      path: '/api/trades',
+      input: z.object({
+        symbol: z.string(),
+        type: z.enum(['buy', 'sell']),
+        amount: z.string(),
+        price: z.string(),
+      }),
+    },
+  },
 };
-
-export function buildUrl(path: string, params?: Record<string, string | number>): string {
-  let url = path;
-  if (params) {
-    Object.entries(params).forEach(([key, value]) => {
-      if (url.includes(`:${key}`)) {
-        url = url.replace(`:${key}`, String(value));
-      }
-    });
-  }
-  return url;
-}

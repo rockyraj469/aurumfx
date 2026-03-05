@@ -18,7 +18,14 @@ async function fetchUser(): Promise<User | null> {
 }
 
 async function logout(): Promise<void> {
-  window.location.href = "/api/logout";
+  const response = await fetch("/api/logout", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!response.ok) {
+    throw new Error("Logout failed");
+  }
 }
 
 export function useAuth() {
@@ -33,7 +40,16 @@ export function useAuth() {
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       queryClient.setQueryData(["/api/auth/user"], null);
+      // Redirect after a brief delay to ensure state is updated
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 300);
+    },
+    onError: () => {
+      // Even if logout fails, redirect home
+      window.location.href = "/";
     },
   });
 
@@ -41,7 +57,7 @@ export function useAuth() {
     user,
     isLoading,
     isAuthenticated: !!user,
-    logout: logoutMutation.mutate,
+    logout: () => logoutMutation.mutate(),
     isLoggingOut: logoutMutation.isPending,
   };
 }
