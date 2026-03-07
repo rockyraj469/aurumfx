@@ -15,11 +15,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Simple file upload parsing (for small files)
-// In production, use proper multipart middleware like 'multer'
 app.use((req, res, next) => {
   if (req.headers['content-type']?.includes('multipart/form-data')) {
-    // For development, we'll just accept multipart uploads
-    // In production, use multer: npm install multer
     (req as any).files = {};
   }
   next();
@@ -27,6 +24,19 @@ app.use((req, res, next) => {
 
 // Setup routes
 const httpServer = await registerRoutes(server, app);
+
+// Add a 404 handler for any unmatched routes (this must come AFTER all other routes)
+app.use((req, res) => {
+  res.status(404).json({ message: "Not found" });
+});
+
+// Error handler
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error(err);
+  const status = err.status || 500;
+  const message = err.message || "Internal Server Error";
+  res.status(status).json({ message });
+});
 
 // Setup Vite for development
 if (process.env.NODE_ENV === "development") {
@@ -37,6 +47,6 @@ if (process.env.NODE_ENV === "development") {
 
 // Start server
 const PORT = process.env.PORT || 5000;
-httpServer.listen(PORT, "127.0.0.1", () => {
+httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
