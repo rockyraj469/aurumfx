@@ -48,7 +48,7 @@ export default function Landing() {
           <a href="/signup">
             <Button variant="glass" className="hidden sm:flex">Create Account</Button>
           </a>
-          <a href="/api/login">
+          <a href="/login">
             <Button>
               Sign In <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
