@@ -20,8 +20,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Aurum Gold Accent */
-    --primary: 35 100% 50%;
+    /* Neon Green Accent */
+    --primary: 120 100% 50%;
     --primary-foreground: 0 0% 0%;
 
     --secondary: 210 40% 96.1%;
@@ -30,7 +30,7 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 35 100% 50%;
+    --accent: 120 100% 50%;
     --accent-foreground: 0 0% 0%;
 
     --destructive: 0 84.2% 60.2%;
@@ -41,9 +41,25 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 35 100% 50%;
+    --ring: 120 100% 50%;
 
     --radius: 0.75rem;
+  }
+
+  /* Subtle fade-in animation for the whole page */
+  body {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
@@ -65,17 +81,40 @@
 
 @layer utilities {
   .glass-panel {
-    @apply bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg;
+    @apply bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg transition-all duration-300;
+    animation: fadeInUp 0.5s ease-out backwards;
   }
+  .glass-panel:hover {
+    @apply shadow-xl border-gray-300;
+    transform: translateY(-2px);
+  }
+
   .text-glow {
-    text-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+    text-shadow: 0 0 10px hsl(var(--primary) / 0.4);
   }
+
   .box-glow {
-    box-shadow: 0 0 40px -10px hsl(var(--primary) / 0.2);
+    @apply bg-primary text-primary-foreground font-medium transition-all duration-200;
+    box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.4);
+  }
+  .box-glow:hover {
+    box-shadow: 0 0 0 4px rgba(0, 255, 0, 0.3);
+    transform: translateY(-1px);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
-/* Custom Scrollbar – lighter version */
+/* Custom Scrollbar – matches neon green */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -88,5 +127,5 @@
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground));
+  background: hsl(var(--primary) / 0.7);
 }
